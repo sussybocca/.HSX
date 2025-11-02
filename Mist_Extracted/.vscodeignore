@@ -1,0 +1,10 @@
+node_modules/
+venv/
+*.log
+*.pyc
+__pycache__/
+test/
+.git/
+*.zip
+*.vsix
+*.md

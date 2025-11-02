@@ -1,0 +1,1 @@
+const App: React.FC = () => <div>Hello TSX</div>;

@@ -1,0 +1,59 @@
+{
+  "name": "hsx",
+  "displayName": "HSX",
+  "description": "Custom file extension for Node.js + Pyodide scripts with bundled dependencies",
+  "version": "1.0.1",
+  "publisher": "William Isaiah Jones",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "activationEvents": [
+    "onCommand:hsx.createNewFile",
+    "onLanguage:hsx"
+  ],
+  "categories": ["Languages"],
+  "icon": "icon/logo.mp4",
+  "contributes": {
+    "languages": [
+      {
+        "id": "hsx",
+        "aliases": ["HSX"],
+        "extensions": [".hsx"],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "icon/logo.png",
+          "dark": "icon/logo.png"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "hsx",
+        "scopeName": "source.hsx",
+        "path": "./syntaxes/hsx.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "hsx.createNewFile",
+        "title": "Create New HSX File"
+      }
+    ]
+  },
+  "main": "extension.js",
+  "scripts": {
+    "test": "node ./test/runTest.js"
+  },
+  "files": [
+    "hsx-compiler.js",
+    "hsx-runtime.js",
+    "extension.js",
+    "language-configuration.json",
+    "syntaxes/",
+    "icon/logo.mp4",
+    "icon/logo.png"
+  ],
+  "devDependencies": {
+    "vsce": "^2.9.2"
+  }
+}
