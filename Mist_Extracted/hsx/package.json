@@ -1,0 +1,25 @@
+{
+  "name": "hsx",
+  "displayName": ".hsx",
+  "description": "Custom file extension for Node.js + Pyodide scripts with bundled dependencies",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.105.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "hsx",
+      "aliases": ["HSX", "hsx"],
+      "extensions": [".hsx"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "hsx",
+      "scopeName": "source.hsx",
+      "path": "./syntaxes/hsx.tmLanguage.json"
+    }]
+  }
+}
