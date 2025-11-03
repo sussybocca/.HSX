@@ -1,15 +1,23 @@
+/*
 Copyright (c) 2025 William Isaiah Jones
-
 All rights reserved.
 
 This software, including all source code, assets, images, videos, scripts, libraries, and associated files
 ("HSX Extension") is the exclusive property of William Isaiah Jones.
 
-You may use this software, but no part of it, in any form or by any means, including but not limited to copying,
-distribution, modification, reverse engineering, or reproduction of code or assets, is permitted without the explicit
-written consent of the author.
+Usage Permissions:
+1. You may use and modify this software locally for personal purposes.
+2. You may create projects using HSX and distribute your own projects.
+   However, you may NOT distribute any of the HSX source code, compiler files, or other original files.
+3. You may NOT redistribute any .js files that are not your own, including compiler or build files, in any form.
+4. You may use the Mist.hsx file in the Mist_Extracted folder for reference and learning purposes only.
+5. There is a frontend version in a subfolder called 'frontend' that you may modify locally,
+   but it cannot be redistributed in any way.
+6. You may NOT copy or claim any part of the software as your own work.
 
-Unauthorized copying or redistribution is prohibited. To request permission for any use beyond standard usage, 
-please contact the business email and provide a description of your intended use:
+Permission Requests:
+Any request to redistribute or use the software beyond the above permissions will automatically be denied.
 
+For questions, contact:
 Email: babyyodacutefry@hugg.store
+
