@@ -1,53 +1,71 @@
 // ============================================================
-// Fire.x – HSX Game Studio (single‑component version)
+// Fire.x – HSX Game Studio (enhanced UI, fully functional)
 // ============================================================
 
 // ---------- Global state ----------
 hsx let currentColor = "red"
 hsx let fps = 60
 hsx let showGrid = true
+hsx let gameRunning = false
 
 // ---------- Single UI component (contains everything) ----------
 hsx define component FireXApp
-  <div style="max-width:1200px; margin:0 auto; padding:20px;">
+  <div style="max-width:1200px; margin:0 auto; padding:20px; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;">
     <!-- Header -->
-    <div style="margin-bottom:20px;">
-      <h1 style="margin:0; font-size:2.5rem; font-weight:300;">🔥 Fire.x</h1>
-      <p style="margin:4px 0 0; opacity:0.7;">Click the canvas to place pixels – then hit RUN</p>
+    <div style="margin-bottom:24px; text-align:center;">
+      <h1 style="margin:0; font-size:3rem; font-weight:300; background: linear-gradient(135deg, #ff4d4d, #ffa64d); -webkit-background-clip:text; -webkit-text-fill-color:transparent; display:inline-block;">🔥 Fire.x</h1>
+      <p style="margin:8px 0 0; opacity:0.8; font-size:1.1rem;">Click the canvas to place pixels – then hit RUN</p>
     </div>
 
     <!-- Toolbar -->
-    <div class="toolbar" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:20px;">
-      <span style="margin-right:8px;">🎨 Color:</span>
-      <div class="color-swatch" style="width:32px; height:32px; border-radius:6px; border:2px solid transparent; background:#ff4d4d;" onclick="setColor('red', event)"></div>
-      <div class="color-swatch" style="width:32px; height:32px; border-radius:6px; border:2px solid transparent; background:#4d88ff;" onclick="setColor('blue', event)"></div>
-      <div class="color-swatch" style="width:32px; height:32px; border-radius:6px; border:2px solid transparent; background:#6bff6b;" onclick="setColor('green', event)"></div>
-      <div class="color-swatch" style="width:32px; height:32px; border-radius:6px; border:2px solid transparent; background:#ffd966;" onclick="setColor('yellow', event)"></div>
-      <div class="color-swatch" style="width:32px; height:32px; border-radius:6px; border:2px solid transparent; background:#c77dff;" onclick="setColor('purple', event)"></div>
-      <div class="color-swatch" style="width:32px; height:32px; border-radius:6px; border:2px solid transparent; background:#ffa64d;" onclick="setColor('orange', event)"></div>
+    <div class="toolbar" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:24px; padding:16px; background:#1e2229; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+      <span style="font-weight:500;">🎨 Color:</span>
+      <div class="color-swatch" data-color="red" style="width:36px; height:36px; border-radius:8px; background:#ff4d4d; cursor:pointer; border:3px solid transparent; transition:0.2s;" onclick="setColor('red', event)"></div>
+      <div class="color-swatch" data-color="blue" style="width:36px; height:36px; border-radius:8px; background:#4d88ff; cursor:pointer; border:3px solid transparent; transition:0.2s;" onclick="setColor('blue', event)"></div>
+      <div class="color-swatch" data-color="green" style="width:36px; height:36px; border-radius:8px; background:#6bff6b; cursor:pointer; border:3px solid transparent; transition:0.2s;" onclick="setColor('green', event)"></div>
+      <div class="color-swatch" data-color="yellow" style="width:36px; height:36px; border-radius:8px; background:#ffd966; cursor:pointer; border:3px solid transparent; transition:0.2s;" onclick="setColor('yellow', event)"></div>
+      <div class="color-swatch" data-color="purple" style="width:36px; height:36px; border-radius:8px; background:#c77dff; cursor:pointer; border:3px solid transparent; transition:0.2s;" onclick="setColor('purple', event)"></div>
+      <div class="color-swatch" data-color="orange" style="width:36px; height:36px; border-radius:8px; background:#ffa64d; cursor:pointer; border:3px solid transparent; transition:0.2s;" onclick="setColor('orange', event)"></div>
 
-      <span style="margin-left:20px;">⚡ FPS:</span>
-      <input type="range" min="1" max="120" value="60" id="fpsSlider" oninput="updateFPS(this.value)" style="background:#2d333b; border:1px solid #444c56; color:inherit; padding:8px 12px; border-radius:6px;">
-      <span id="fpsDisplay">60</span>
+      <div style="width:2px; height:30px; background:#444c56; margin:0 8px;"></div>
 
-      <button onclick="clearPixels()" style="margin-left:auto; background:#2d333b; border:1px solid #444c56; color:inherit; padding:8px 12px; border-radius:6px; cursor:pointer;">🗑️ Clear</button>
-      <button onclick="runGame()" style="background:#2b6e3b; border:1px solid #444c56; color:inherit; padding:8px 12px; border-radius:6px; cursor:pointer;">▶️ Run Game</button>
-      <button onclick="stopGame()" style="background:#6e3b2b; border:1px solid #444c56; color:inherit; padding:8px 12px; border-radius:6px; cursor:pointer;">⏹️ Stop</button>
+      <span style="font-weight:500;">⚡ FPS:</span>
+      <input type="range" min="1" max="120" value="60" id="fpsSlider" oninput="updateFPS(this.value)" style="width:140px; background:#2d333b; border:1px solid #444c56; color:inherit; padding:6px 8px; border-radius:8px;">
+      <span id="fpsDisplay" style="min-width:40px; font-weight:600;">60</span>
+
+      <button onclick="toggleGrid()" id="gridBtn" style="background:#2d333b; border:1px solid #444c56; color:inherit; padding:8px 14px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:4px;">📏 Grid</button>
+      
+      <div style="flex:1;"></div>
+
+      <button onclick="clearPixels()" style="background:#2d333b; border:1px solid #444c56; color:inherit; padding:8px 14px; border-radius:8px; cursor:pointer;">🗑️ Clear</button>
+      <button onclick="runGame()" id="runBtn" style="background:#2b6e3b; border:none; color:white; padding:8px 18px; border-radius:8px; cursor:pointer; font-weight:600;">▶️ Run</button>
+      <button onclick="stopGame()" id="stopBtn" style="background:#6e3b2b; border:none; color:white; padding:8px 18px; border-radius:8px; cursor:pointer; font-weight:600;">⏹️ Stop</button>
     </div>
 
     <!-- Main row: canvas + pixel list -->
-    <div style="display:flex; gap:20px; margin-top:20px; align-items:start; justify-content:center;">
-      <!-- Canvas Area -->
+    <div style="display:flex; gap:24px; margin-top:20px; flex-wrap:wrap; justify-content:center;">
+      <!-- Canvas Area with status -->
       <div style="text-align:center;">
-        <canvas id="gameCanvas" width="500" height="500" style="width:100%; max-width:500px; height:auto; cursor:crosshair; background:#0f1114; border-radius:8px; box-shadow:0 8px 20px rgba(0,0,0,0.6);"></canvas>
-        <div style="margin-top:8px; font-size:0.9rem; opacity:0.6;">X: <span id="coordX">0</span> Y: <span id="coordY">0</span></div>
+        <div style="position:relative; display:inline-block;">
+          <canvas id="gameCanvas" width="500" height="500" style="display:block; width:100%; max-width:500px; height:auto; cursor:crosshair; background:#0f1114; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.6);"></canvas>
+          <div id="gameStatusBadge" style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.6); color:#fff; padding:4px 10px; border-radius:20px; font-size:0.8rem; backdrop-filter:blur(4px); border:1px solid #444;">⏸️ Stopped</div>
+        </div>
+        <div style="margin-top:12px; display:flex; justify-content:center; gap:20px; font-size:0.95rem; opacity:0.7;">
+          <span>X: <span id="coordX" style="font-weight:600;">0</span></span>
+          <span>Y: <span id="coordY" style="font-weight:600;">0</span></span>
+        </div>
       </div>
 
-      <!-- Pixel List Panel -->
-      <div style="width:280px; background:#2b3038; border-radius:10px; padding:16px; box-shadow:0 4px 12px rgba(0,0,0,0.4);">
-        <h3 style="margin:0 0 12px;">📋 Placed Pixels</h3>
-        <ul class="pixel-list" id="pixelList" style="max-height:400px; overflow-y:auto; list-style:none; padding:0; margin:10px 0 0;"></ul>
-        <div style="margin-top:10px; font-size:0.8rem;">Total: <span id="pixelCount">0</span></div>
+      <!-- Pixel List Panel (redesigned) -->
+      <div style="width:300px; background:#1e2229; border-radius:12px; padding:18px; box-shadow:0 6px 14px rgba(0,0,0,0.4);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h3 style="margin:0; font-size:1.2rem;">📋 Pixels</h3>
+          <span id="pixelCount" style="background:#2d333b; padding:4px 10px; border-radius:30px; font-size:0.85rem;">0</span>
+        </div>
+        <ul class="pixel-list" id="pixelList" style="max-height:360px; overflow-y:auto; list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px;"></ul>
+        <div style="margin-top:16px; border-top:1px solid #2d333b; padding-top:12px; font-size:0.85rem; color:#888; text-align:center;">
+          Click on canvas to add • Click ✕ to remove
+        </div>
       </div>
     </div>
   </div>
@@ -58,7 +76,6 @@ hsx render FireXApp
 
 // ---------- Main application logic (JS) ----------
 {js
-
   // ----- Get runtime reference -----
   const rt = window.firex;
   if (!rt) {
@@ -74,19 +91,36 @@ hsx render FireXApp
     .filter(div => div.textContent.includes('📂 Drop HSX files here'));
   dropZones.forEach(div => div.remove());
 
+  // ----- Helper: highlight selected color swatch -----
+  function highlightColorSwatch(color) {
+    document.querySelectorAll('.color-swatch').forEach(el => {
+      el.style.borderColor = 'transparent';
+      if (el.dataset.color === color) {
+        el.style.borderColor = '#ffd966';
+      }
+    });
+  }
+
   // ----- Global functions (attached to window) -----
   window.setColor = (color, event) => {
     rt.state.currentColor = color;
-    document.querySelectorAll('.color-swatch').forEach(el => {
-      el.style.borderColor = 'transparent';
-    });
-    if (event) event.target.style.borderColor = '#ffd966';
+    highlightColorSwatch(color);
   };
 
   window.updateFPS = (val) => {
     rt.state.fps = parseInt(val);
     document.getElementById('fpsDisplay').innerText = val;
     if (rt.gameConfig) rt.gameConfig.fps = val;
+  };
+
+  window.toggleGrid = () => {
+    rt.state.showGrid = !rt.state.showGrid;
+    const btn = document.getElementById('gridBtn');
+    if (btn) {
+      btn.style.background = rt.state.showGrid ? '#2b6e3b' : '#2d333b';
+      btn.style.borderColor = rt.state.showGrid ? '#2b6e3b' : '#444c56';
+    }
+    drawCanvas();
   };
 
   window.clearPixels = () => {
@@ -143,17 +177,26 @@ hsx render FireXApp
   window.runGame = () => {
     if (animFrame) cancelAnimationFrame(animFrame);
     rt.gameConfig.running = true;
+    rt.state.gameRunning = true;
     lastTimestamp = performance.now();
     animFrame = requestAnimationFrame(gameLoop);
+    // Update UI
+    document.getElementById('gameStatusBadge').innerHTML = '▶️ Running';
+    document.getElementById('runBtn').style.opacity = '0.7';
+    document.getElementById('stopBtn').style.opacity = '1';
   };
 
   window.stopGame = () => {
     rt.gameConfig.running = false;
+    rt.state.gameRunning = false;
     if (animFrame) {
       cancelAnimationFrame(animFrame);
       animFrame = null;
     }
     drawCanvas();
+    document.getElementById('gameStatusBadge').innerHTML = '⏸️ Stopped';
+    document.getElementById('runBtn').style.opacity = '1';
+    document.getElementById('stopBtn').style.opacity = '0.7';
   };
 
   function updatePixelList() {
@@ -167,26 +210,51 @@ hsx render FireXApp
       li.style.display = 'flex';
       li.style.justifyContent = 'space-between';
       li.style.alignItems = 'center';
-      li.style.padding = '6px 8px';
+      li.style.padding = '8px 12px';
       li.style.background = '#1c2128';
-      li.style.marginBottom = '4px';
-      li.style.borderRadius = '4px';
+      li.style.borderRadius = '8px';
       li.style.fontSize = '13px';
-      li.innerHTML = `<span style="display:inline-block; width:12px; height:12px; background:${p.color}; border-radius:2px; margin-right:8px;"></span> (${p.x},${p.y})`;
+      li.style.transition = '0.2s';
+      li.style.border = '1px solid #2d333b';
+      
+      const left = document.createElement('div');
+      left.style.display = 'flex';
+      left.style.alignItems = 'center';
+      left.style.gap = '10px';
+      
+      const swatch = document.createElement('span');
+      swatch.style.display = 'inline-block';
+      swatch.style.width = '16px';
+      swatch.style.height = '16px';
+      swatch.style.background = p.color;
+      swatch.style.borderRadius = '4px';
+      swatch.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+      
+      const coords = document.createElement('span');
+      coords.innerText = `(${p.x},${p.y})`;
+      coords.style.fontFamily = 'monospace';
+      
+      left.appendChild(swatch);
+      left.appendChild(coords);
+      
       const delBtn = document.createElement('button');
       delBtn.textContent = '✕';
-      delBtn.style.padding = '2px 8px';
+      delBtn.style.padding = '4px 10px';
       delBtn.style.background = '#c42b2b';
       delBtn.style.border = 'none';
       delBtn.style.color = 'white';
-      delBtn.style.borderRadius = '4px';
+      delBtn.style.borderRadius = '6px';
       delBtn.style.cursor = 'pointer';
+      delBtn.style.fontWeight = 'bold';
+      delBtn.style.fontSize = '12px';
       delBtn.onclick = (e) => {
         e.stopPropagation();
         pixels.splice(idx, 1);
         updatePixelList();
         drawCanvas();
       };
+      
+      li.appendChild(left);
       li.appendChild(delBtn);
       listEl.appendChild(li);
     });
@@ -205,6 +273,7 @@ hsx render FireXApp
       const color = rt.state.currentColor || 'red';
       rt.gameConfig.pixels.push({ color, x, y });
       updatePixelList();
+      drawCanvas();
     });
 
     canvas.addEventListener('mousemove', (e) => {
@@ -219,10 +288,28 @@ hsx render FireXApp
   }
 
   // ----- Initialise UI -----
+  // Set initial color highlight
+  highlightColorSwatch(rt.state.currentColor || 'red');
+  
+  // Draw canvas
   drawCanvas();
   updatePixelList();
+  
+  // Set FPS slider
   const slider = document.getElementById('fpsSlider');
   if (slider) slider.value = rt.state.fps;
   const disp = document.getElementById('fpsDisplay');
   if (disp) disp.innerText = rt.state.fps;
+  
+  // Set grid button state
+  const gridBtn = document.getElementById('gridBtn');
+  if (gridBtn) {
+    gridBtn.style.background = rt.state.showGrid ? '#2b6e3b' : '#2d333b';
+  }
+  
+  // Stop button initially dimmed if not running
+  document.getElementById('stopBtn').style.opacity = '0.7';
+  
+  // Ensure runtime gameConfig reflects initial state
+  rt.gameConfig.fps = rt.state.fps;
 }
