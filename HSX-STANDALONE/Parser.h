@@ -54,7 +54,14 @@ struct IfElsePrintNode : ASTNode {
 struct FrontendNode : ASTNode {
     std::string tag;
     std::string content;
-    std::unique_ptr<ASTNode> clone() const override { return std::make_unique<FrontendNode>(*this); }
+    std::vector<std::string> extraParams;
+    std::vector<double> extraNumbers;
+    std::unique_ptr<ASTNode> clone() const override {
+        auto c = std::make_unique<FrontendNode>();
+        c->tag = tag; c->content = content;
+        c->extraParams = extraParams; c->extraNumbers = extraNumbers;
+        return c;
+    }
 };
 
 struct BackendNode : ASTNode {
@@ -62,7 +69,15 @@ struct BackendNode : ASTNode {
     std::string params;
     bool hasNumber = false;
     double numberVal = 0.0;
-    std::unique_ptr<ASTNode> clone() const override { return std::make_unique<BackendNode>(*this); }
+    std::vector<std::string> extraParams;
+    std::vector<double> extraNumbers;
+    std::unique_ptr<ASTNode> clone() const override {
+        auto c = std::make_unique<BackendNode>();
+        c->command = command; c->params = params;
+        c->hasNumber = hasNumber; c->numberVal = numberVal;
+        c->extraParams = extraParams; c->extraNumbers = extraNumbers;
+        return c;
+    }
 };
 
 struct FunctionDefNode : ASTNode {
@@ -310,14 +325,29 @@ private:
     static ASTPtr parseFrontend(const std::vector<Token>& tokens, size_t& i) {
         std::string tag = tokens[i].value;
         i++;
-        std::string content;
-        if (i < tokens.size() && tokens[i].type == TokenType::STRING) {
-            content = tokens[i].value;
-            i++;
-        }
         auto node = std::make_unique<FrontendNode>();
         node->tag = tag;
-        node->content = content;
+
+        while (i < tokens.size()) {
+            if (tokens[i].type == TokenType::STRING) {
+                if (node->content.empty())
+                    node->content = tokens[i].value;
+                else
+                    node->extraParams.push_back(tokens[i].value);
+                i++;
+            } else if (tokens[i].type == TokenType::EQUALS) {
+                i++;
+                if (i < tokens.size() && tokens[i].type == TokenType::NUMBER) {
+                    node->extraNumbers.push_back(std::stod(tokens[i].value));
+                    i++;
+                }
+            } else if (tokens[i].type == TokenType::NUMBER) {
+                node->extraNumbers.push_back(std::stod(tokens[i].value));
+                i++;
+            } else {
+                break;
+            }
+        }
         return node;
     }
 
@@ -326,21 +356,35 @@ private:
         i++;
         auto node = std::make_unique<BackendNode>();
         node->command = cmd;
-        if (i < tokens.size()) {
+
+        while (i < tokens.size()) {
             if (tokens[i].type == TokenType::STRING) {
-                node->params = tokens[i].value;
-                i++;
-            } else if (tokens[i].type == TokenType::NUMBER) {
-                node->hasNumber = true;
-                node->numberVal = std::stod(tokens[i].value);
+                if (node->params.empty())
+                    node->params = tokens[i].value;
+                else
+                    node->extraParams.push_back(tokens[i].value);
                 i++;
             } else if (tokens[i].type == TokenType::EQUALS) {
                 i++;
                 if (i < tokens.size() && tokens[i].type == TokenType::NUMBER) {
-                    node->hasNumber = true;
-                    node->numberVal = std::stod(tokens[i].value);
+                    if (!node->hasNumber) {
+                        node->hasNumber = true;
+                        node->numberVal = std::stod(tokens[i].value);
+                    } else {
+                        node->extraNumbers.push_back(std::stod(tokens[i].value));
+                    }
                     i++;
                 }
+            } else if (tokens[i].type == TokenType::NUMBER) {
+                if (!node->hasNumber) {
+                    node->hasNumber = true;
+                    node->numberVal = std::stod(tokens[i].value);
+                } else {
+                    node->extraNumbers.push_back(std::stod(tokens[i].value));
+                }
+                i++;
+            } else {
+                break;
             }
         }
         return node;
