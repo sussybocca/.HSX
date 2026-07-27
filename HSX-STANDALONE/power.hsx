@@ -1,0 +1,75 @@
+HSX: +T_X_T+ ""HSX POWER DEMO""
+HSX: +H_R_L+
+HSX: +H_2+ ""Mini Calculator""
+HSX: *V_A_R.1 =5.0*
+HSX: *V_A_R.2 =3.0*
+HSX: +T_X_T+ ""5.0 + 3.0 = 8.0""
+HSX: +T_X_T+ ""5.0 - 3.0 = 2.0""
+HSX: +T_X_T+ ""5.0 * 3.0 = 15.0""
+HSX: +T_X_T+ ""5.0 / 3.0 = 1.666...""
+HSX: +H_R_L+
+HSX: +H_2+ ""Login System""
+HSX: +I_N_U_T+ ""Enter username:""
+HSX: +I_N_U_T+ ""Enter password:""
+HSX: +T_X_T+ ""Access granted!""
+HSX: +H_R_L+
+HSX: +H_2+ ""Data Table""
+HSX: +T_B_L+
+HSX: +T_R_W+
+HSX: +T_C_L+ ""Name""
+HSX: +T_C_L+ ""Score""
+HSX: +T_C_L+ ""Rank""
+HSX: +/T_R_W+
+HSX: +T_R_W+
+HSX: +T_C_L+ ""Alice""
+HSX: +T_C_L+ ""95.0""
+HSX: +T_C_L+ ""#1""
+HSX: +/T_R_W+
+HSX: +T_R_W+
+HSX: +T_C_L+ ""Bob""
+HSX: +T_C_L+ ""87.0""
+HSX: +T_C_L+ ""#2""
+HSX: +/T_R_W+
+HSX: +/T_B_L+
+HSX: +H_R_L+
+HSX: +H_2+ ""Conditional Access""
+HSX: *V_A_R.3 =18.0*
+HSX: C>*V_A_R.3 =18.0*>C = F>Welcome! You are 18.>F error E>Access denied. Must be 18.>E =Print
+HSX: +H_R_L+
+HSX: +H_2+ ""Loop Demo - Countdown""
+HSX: +T_X_T+ ""5""
+HSX: +T_X_T+ ""4""
+HSX: +T_X_T+ ""3""
+HSX: +T_X_T+ ""2""
+HSX: +T_X_T+ ""1""
+HSX: +T_X_T+ ""Liftoff!""
+HSX: +H_R_L+
+HSX: +H_2+ ""Grid Layout""
+HSX: +G_R_D+ =3.0
+HSX: +C_A_R_D+ ""Fast"" ""HSX compiles to native code"" """"
+HSX: +C_A_R_D+ ""Simple"" ""Commands not boilerplate"" """"
+HSX: +C_A_R_D+ ""Powerful"" ""Backend + Frontend"" """"
+HSX: +/G_R_D+
+HSX: +H_R_L+
+HSX: +H_2+ ""Button Actions""
+HSX: +B_A_I_T+ ""Click for Alert""
+HSX: +B_A_I_T+ ""Submit Form""
+HSX: +B_A_I_T+ ""Download Data""
+HSX: +H_R_L+
+HSX: +H_2+ ""Form""
+HSX: +F_R_M+ ""/api/users""
+HSX: +L_B_L+ ""Name:""
+HSX: +F_L_D+ ""name"" =""text""
+HSX: +B_R_K+
+HSX: +L_B_L+ ""Email:""
+HSX: +F_L_D+ ""email"" =""text""
+HSX: +B_R_K+
+HSX: +S_U_B_M+ ""Create User""
+HSX: +R_S_E_T+ ""Clear""
+HSX: +/F_R_M+
+HSX: +H_R_L+
+HSX: +B_A_D_G+ ""v1.0""
+HSX: +B_A_D_G+ ""PROD""
+HSX: +S_P_C_R+ =2.0
+HSX: +T_X_T+ ""HSX - Commands not code. Speed by design.""
+HSX: /C_O_M/ ""End of power demo"" /
