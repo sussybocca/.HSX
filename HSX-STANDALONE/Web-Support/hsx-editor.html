@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSX Web Editor</title>
+<link rel="stylesheet" href="hsx-core.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { display: flex; height: 100vh; font-family: system-ui, sans-serif; }
+#editor-panel { width: 50%; display: flex; flex-direction: column; background: #1e1e1e; }
+#editor-panel h2 { color: #ccc; padding: 10px; font-size: 14px; background: #333; }
+#editor { flex: 1; background: #1e1e1e; color: #d4d4d4; border: none; padding: 15px; font-family: 'Consolas', 'Cascadia Code', monospace; font-size: 14px; resize: none; outline: none; tab-size: 2; }
+#preview-panel { width: 50%; display: flex; flex-direction: column; }
+#preview-panel h2 { color: #333; padding: 10px; font-size: 14px; background: #e0e0e0; }
+#iframe { flex: 1; border: none; }
+</style>
+</head>
+<body>
+
+<div id="editor-panel">
+  <h2>HSX Code</h2>
+  <textarea id="editor" spellcheck="false">HSX: +T_H_E_M_E+ ""dark""
+HSX: +H_1+ ""Hello from WASM""
+HSX: +T_X_T+ ""This was compiled in your browser""
+HSX: +B_A_I_T+ ""Click Me""
+HSX: +S_P_C_R+ =1.0
+HSX: +C_A_R_D+
+HSX: +H_2+ ""Features""
+HSX: +T_X_T+ ""Zero install""
+HSX: +T_X_T+ ""Instant preview""
+HSX: +/D_I_V+</textarea>
+</div>
+
+<div id="preview-panel">
+  <h2>Preview</h2>
+  <iframe id="iframe"></iframe>
+</div>
+
+<script src="hsx-compiler.js"></script>
+<script>
+Module.onRuntimeInitialized = () => {
+  const compile = Module.cwrap('compileHSX', 'string', ['string']);
+  const editor = document.getElementById('editor');
+  const iframe = document.getElementById('iframe');
+
+  function update() {
+    try {
+      const js = compile(editor.value);
+      iframe.srcdoc = '<html><head><link rel="stylesheet" href="hsx-core.css"></head><body><div id="hsx-root"></div><script>' + js + '<\/script></body></html>';
+    } catch(e) {
+      iframe.srcdoc = '<p style="color:red;padding:20px;">Compile Error: ' + e.message + '</p>';
+    }
+  }
+
+  editor.addEventListener('input', update);
+  update();
+};
+</script>
+</body>
+</html>
